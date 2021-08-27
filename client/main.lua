@@ -58,6 +58,13 @@ function DrawText3D(x, y, z, text)
     ClearDrawOrigin()
 end
 
+function SaveSkin()
+	local model = GetEntityModel(PlayerPedId())
+    clothing = json.encode(skinData)
+	TriggerServerEvent("qb-clothing:saveSkin", model, clothing)
+end
+
+
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     isLoggedIn = true
@@ -137,6 +144,7 @@ RegisterNUICallback("putOnOutfit", function(data, cb)
     SetNuiFocus(false, false)
     display = false
     QBCore.Functions.Notify("You have put on the uniform: ".. data.name, "success")
+    SaveSkin()
     SendNUIMessage({
         status = "closeLocker",
     })
